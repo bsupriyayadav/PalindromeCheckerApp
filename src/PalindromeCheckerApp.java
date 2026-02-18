@@ -1,3 +1,4 @@
+import java.util.Stack; // Required for UC5
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
 
@@ -19,12 +20,12 @@ public class PalindromeCheckerApp {
 
 
         String original = "madam";
-        String reversed = "";
+        String reversedUC3 = "";
         for (int i = original.length() - 1; i >= 0; i--) {
-            reversed += original.charAt(i);
+            reversedUC3 += original.charAt(i);
         }
 
-        if (original.equals(reversed)) {
+        if (original.equals(reversedUC3)) {
             System.out.println("UC3: " + original + " is a palindrome.");
         } else {
             System.out.println("UC3: " + original + " is not a palindrome.");
@@ -35,18 +36,38 @@ public class PalindromeCheckerApp {
         char[] charArray = inputUC4.toCharArray();
         int start = 0;
         int end = charArray.length - 1;
-        boolean isPalindrome = true;
+        boolean isPalUC4 = true;
 
         while (start < end) {
             if (charArray[start] != charArray[end]) {
-                isPalindrome = false;
+                isPalUC4 = false;
                 break;
             }
             start++;
             end--;
         }
+        System.out.println("UC4: Is " + inputUC4 + " a palindrome? " + isPalUC4);
 
-        System.out.println("UC4: Is " + inputUC4 + " a palindrome? " + isPalindrome);
+
+        String inputUC5 = "madam";
+        Stack<Character> stack = new Stack<>();
+
+
+        for (int i = 0; i < inputUC5.length(); i++) {
+            stack.push(inputUC5.charAt(i));
+        }
+
+
+        String reversedUC5 = "";
+        while (!stack.isEmpty()) {
+            reversedUC5 += stack.pop();
+        }
+
+        if (inputUC5.equals(reversedUC5)) {
+            System.out.println("UC5: " + inputUC5 + " is a palindrome (Stack Method).");
+        } else {
+            System.out.println("UC5: " + inputUC5 + " is not a palindrome (Stack Method).");
+        }
 
     }
 }
