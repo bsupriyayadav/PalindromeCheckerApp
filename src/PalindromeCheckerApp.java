@@ -1,4 +1,7 @@
-import java.util.Stack; // Required for UC5
+import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
 
@@ -50,24 +53,41 @@ public class PalindromeCheckerApp {
 
 
         String inputUC5 = "madam";
-        Stack<Character> stack = new Stack<>();
-
-
+        Stack<Character> stackUC5 = new Stack<>();
         for (int i = 0; i < inputUC5.length(); i++) {
-            stack.push(inputUC5.charAt(i));
+            stackUC5.push(inputUC5.charAt(i));
         }
 
-
         String reversedUC5 = "";
-        while (!stack.isEmpty()) {
-            reversedUC5 += stack.pop();
+        while (!stackUC5.isEmpty()) {
+            reversedUC5 += stackUC5.pop();
         }
 
         if (inputUC5.equals(reversedUC5)) {
-            System.out.println("UC5: " + inputUC5 + " is a palindrome (Stack Method).");
+            System.out.println("UC5: " + inputUC5 + " is a palindrome (Stack).");
         } else {
-            System.out.println("UC5: " + inputUC5 + " is not a palindrome (Stack Method).");
+            System.out.println("UC5: " + inputUC5 + " is not a palindrome (Stack).");
         }
+
+
+        String inputUC6 = "madam";
+        Stack<Character> stackUC6 = new Stack<>();
+        Queue<Character> queueUC6 = new LinkedList<>();
+
+        for (int i = 0; i < inputUC6.length(); i++) {
+            stackUC6.push(inputUC6.charAt(i)); // LIFO
+            queueUC6.add(inputUC6.charAt(i));  // FIFO
+        }
+
+        boolean isPalUC6 = true;
+        while (!stackUC6.isEmpty()) {
+
+            if (!stackUC6.pop().equals(queueUC6.remove())) {
+                isPalUC6 = false;
+                break;
+            }
+        }
+        System.out.println("UC6: Is " + inputUC6 + " a palindrome? (Queue+Stack): " + isPalUC6);
 
     }
 }
