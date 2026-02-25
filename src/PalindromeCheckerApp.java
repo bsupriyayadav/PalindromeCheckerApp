@@ -159,26 +159,43 @@ public class PalindromeCheckerApp {
         }
 
         System.out.println("UC8: Singly Linked List (In-place Reversal) Result: " + isPalUC8);
-        System.out.println("-------------------------------------------");
 
         // --- UC9: Recursive Palindrome Checker ---
         String inputUC9 = "racecar";
         boolean isPalUC9 = checkRecursive(inputUC9, 0, inputUC9.length() - 1);
         System.out.println("UC9: Recursive Result for " + inputUC9 + ": " + isPalUC9);
 
+        // --- UC10: Case-Insensitive & Space-Ignored Palindrome Checker ---
+        String inputUC10 = "A man a plan a canal Panama";
+
+        String processedUC10 = inputUC10.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        int left = 0;
+        int right = processedUC10.length() - 1;
+        boolean isPalUC10 = true;
+
+        while (left < right) {
+            if (processedUC10.charAt(left) != processedUC10.charAt(right)) {
+                isPalUC10 = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+        System.out.println("UC10: Input: \"" + inputUC10 + "\"");
+        System.out.println("UC10: Normalized: \"" + processedUC10 + "\"");
+        System.out.println("UC10: Result: " + isPalUC10);
+
         System.out.println("-------------------------------------------");
     }
 
     public static boolean checkRecursive(String str, int s, int e) {
-
         if (s >= e) {
             return true;
         }
-
         if (str.charAt(s) != str.charAt(e)) {
             return false;
         }
-
         return checkRecursive(str, s + 1, e - 1);
     }
 }
