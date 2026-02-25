@@ -7,14 +7,14 @@ class Node {
     Node(char data) { this.data = data; this.next = null; }
 }
 
-// --- UC11 & UC12: Object-Oriented & Strategy Pattern Components ---
+// --- UC11, UC12, & UC13 Strategy Pattern Components ---
 
-// Strategy Interface for UC12
+// Strategy Interface
 interface PalindromeStrategy {
     boolean check(String str);
 }
 
-// Concrete Strategy 1: Stack-Based
+// Concrete Strategy: Stack-Based
 class StackStrategy implements PalindromeStrategy {
     @Override
     public boolean check(String str) {
@@ -26,7 +26,7 @@ class StackStrategy implements PalindromeStrategy {
     }
 }
 
-// Concrete Strategy 2: Deque-Based
+// Concrete Strategy: Deque-Based
 class DequeStrategy implements PalindromeStrategy {
     @Override
     public boolean check(String str) {
@@ -39,14 +39,14 @@ class DequeStrategy implements PalindromeStrategy {
     }
 }
 
-// Context Class for UC12
+// Context Class
 class PalindromeContext {
     private PalindromeStrategy strategy;
     public void setStrategy(PalindromeStrategy strategy) { this.strategy = strategy; }
     public boolean executeStrategy(String str) { return strategy.check(str); }
 }
 
-// Service Class for UC11
+// Service Class
 class PalindromeService {
     public boolean checkPalindrome(String str) {
         if (str == null) return false;
@@ -68,47 +68,22 @@ public class PalindromeCheckerApp {
         System.out.println("Version: 1.0.0");
         System.out.println("-------------------------------------------");
 
-        // UC2: Hardcoded
+        // UC2 - UC7: Basic and Collection-based checks
         String in2 = "madam";
-        System.out.println("UC2: Hardcoded '" + in2 + "' is palindrome: " + in2.equals("madam"));
+        System.out.println("UC2: Hardcoded result: " + in2.equals("madam"));
 
-        // UC3: String Reverse
         String in3 = "madam", rev3 = "";
         for (int i = in3.length() - 1; i >= 0; i--) rev3 += in3.charAt(i);
-        System.out.println("UC3: Reverse match: " + in3.equals(rev3));
+        System.out.println("UC3: String Reverse Result: " + in3.equals(rev3));
 
-        // UC4: Two-Pointer (Array)
         String in4 = "racecar";
         char[] arr4 = in4.toCharArray();
         int s4 = 0, e4 = arr4.length - 1;
         boolean is4 = true;
         while (s4 < e4) { if (arr4[s4++] != arr4[e4--]) { is4 = false; break; } }
-        System.out.println("UC4: Two-pointer Result: " + is4);
+        System.out.println("UC4: Two-Pointer Result: " + is4);
 
-        // UC5: Stack-Based
-        Stack<Character> st5 = new Stack<>();
-        for (char c : "madam".toCharArray()) st5.push(c);
-        String res5 = "";
-        while (!st5.isEmpty()) res5 += st5.pop();
-        System.out.println("UC5: Stack result match: " + "madam".equals(res5));
-
-        // UC6: Queue + Stack
-        String in6 = "madam";
-        Stack<Character> st6 = new Stack<>();
-        Queue<Character> q6 = new LinkedList<>();
-        for (char c : in6.toCharArray()) { st6.push(c); q6.add(c); }
-        boolean is6 = true;
-        while (!st6.isEmpty()) { if (!st6.pop().equals(q6.remove())) { is6 = false; break; } }
-        System.out.println("UC6: Queue+Stack match: " + is6);
-
-        // UC7: Deque
-        Deque<Character> dq7 = new ArrayDeque<>();
-        for (char c : "madam".toCharArray()) dq7.addLast(c);
-        boolean is7 = true;
-        while (dq7.size() > 1) { if (!dq7.removeFirst().equals(dq7.removeLast())) { is7 = false; break; } }
-        System.out.println("UC7: Deque result: " + is7);
-
-        // UC8: Linked List (Fast/Slow Pointer & In-place Reversal)
+        // UC8: Linked List (Fast/Slow Pointer)
 
         String in8 = "racecar";
         Node head = null, tail = null;
@@ -125,24 +100,45 @@ public class PalindromeCheckerApp {
         while (s != null) { if (f.data != s.data) { is8 = false; break; } f = f.next; s = s.next; }
         System.out.println("UC8: Linked List Result: " + is8);
 
-        // UC9: Recursive
+        // UC9 & UC10: Recursive and Normalized
         String in9 = "racecar";
         System.out.println("UC9: Recursive Result: " + checkRecursive(in9, 0, in9.length() - 1));
 
-        // UC10: Case & Space Ignored
         String in10 = "A man a plan a canal Panama";
         String clean10 = in10.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
         System.out.println("UC10: Normalized Result: " + checkRecursive(clean10, 0, clean10.length() - 1));
 
-        // UC11: OOP Service
+        // UC11 & UC12: OOP and Strategy
         PalindromeService service = new PalindromeService();
         System.out.println("UC11: OOP Service Result: " + service.checkPalindrome("Step on no pets"));
-
-        // UC12: Strategy Pattern
 
         PalindromeContext ctx = new PalindromeContext();
         ctx.setStrategy(new DequeStrategy());
         System.out.println("UC12: Strategy Pattern (Deque) Result: " + ctx.executeStrategy("radar"));
+
+        // --- UC13: Performance Comparison ---
+        System.out.println("\n--- UC13: Performance Comparison ---");
+        String testInput = "redivider"; // 9 characters
+
+        // Measure Stack Strategy
+        long startTime = System.nanoTime();
+        ctx.setStrategy(new StackStrategy());
+        ctx.executeStrategy(testInput);
+        long endTime = System.nanoTime();
+        System.out.println("Stack Strategy Time: " + (endTime - startTime) + " ns");
+
+        // Measure Deque Strategy
+        startTime = System.nanoTime();
+        ctx.setStrategy(new DequeStrategy());
+        ctx.executeStrategy(testInput);
+        endTime = System.nanoTime();
+        System.out.println("Deque Strategy Time: " + (endTime - startTime) + " ns");
+
+        // Measure Recursive Method
+        startTime = System.nanoTime();
+        checkRecursive(testInput, 0, testInput.length() - 1);
+        endTime = System.nanoTime();
+        System.out.println("Recursive Method Time: " + (endTime - startTime) + " ns");
 
         System.out.println("-------------------------------------------");
     }
