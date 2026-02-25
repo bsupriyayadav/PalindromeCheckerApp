@@ -15,6 +15,31 @@ class Node {
     }
 }
 
+// --- UC11: Object-Oriented Palindrome Service Class ---
+class PalindromeChecker {
+    /**
+     * Goal: Encapsulate palindrome logic in a class.
+     * Concept: Single Responsibility Principle (SRP)
+     */
+    public boolean checkPalindrome(String str) {
+        if (str == null) return false;
+
+        // Internal logic (Preprocessing + Two-Pointer)
+        String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        int left = 0;
+        int right = cleaned.length() - 1;
+
+        while (left < right) {
+            if (cleaned.charAt(left) != cleaned.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
         // --- UC1: Application Entry & Welcome Message ---
@@ -47,7 +72,7 @@ public class PalindromeCheckerApp {
             System.out.println("UC3: " + original + " is not a palindrome.");
         }
 
-        // --- UC4: Character Array Based Palindrome Check (Two-Pointer Technique) ---
+        // --- UC4: Character Array Based Palindrome Check ---
         String inputUC4 = "racecar";
         char[] charArray = inputUC4.toCharArray();
         int start = 0;
@@ -111,33 +136,24 @@ public class PalindromeCheckerApp {
                 break;
             }
         }
-        System.out.println("UC7: Deque (Front & Rear) Result: " + isPalUC7);
+        System.out.println("UC7: Deque Result: " + isPalUC7);
 
         // --- UC8: Linked List Based Palindrome Checker ---
         String inputUC8 = "racecar";
-
-        Node head = null;
-        Node tail = null;
+        Node head = null, tail = null;
         for (char c : inputUC8.toCharArray()) {
             Node newNode = new Node(c);
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
+            if (head == null) { head = newNode; tail = newNode; }
+            else { tail.next = newNode; tail = newNode; }
         }
 
-        Node slow = head;
-        Node fast = head;
+        Node slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        Node prev = null;
-        Node current = slow;
+        Node prev = null, current = slow;
         while (current != null) {
             Node nextNode = current.next;
             current.next = prev;
@@ -145,57 +161,43 @@ public class PalindromeCheckerApp {
             current = nextNode;
         }
 
-        Node firstHalf = head;
-        Node secondHalf = prev;
+        Node fHalf = head, sHalf = prev;
         boolean isPalUC8 = true;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                isPalUC8 = false;
-                break;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
+        while (sHalf != null) {
+            if (fHalf.data != sHalf.data) { isPalUC8 = false; break; }
+            fHalf = fHalf.next;
+            sHalf = sHalf.next;
         }
-
-        System.out.println("UC8: Singly Linked List (In-place Reversal) Result: " + isPalUC8);
+        System.out.println("UC8: Singly Linked List Result: " + isPalUC8);
 
         // --- UC9: Recursive Palindrome Checker ---
         String inputUC9 = "racecar";
         boolean isPalUC9 = checkRecursive(inputUC9, 0, inputUC9.length() - 1);
-        System.out.println("UC9: Recursive Result for " + inputUC9 + ": " + isPalUC9);
+        System.out.println("UC9: Recursive Result: " + isPalUC9);
 
-        // --- UC10: Case-Insensitive & Space-Ignored Palindrome Checker ---
+        // --- UC10: Case-Insensitive & Space-Ignored ---
         String inputUC10 = "A man a plan a canal Panama";
-
         String processedUC10 = inputUC10.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-
-        int left = 0;
-        int right = processedUC10.length() - 1;
+        int l = 0, r = processedUC10.length() - 1;
         boolean isPalUC10 = true;
-
-        while (left < right) {
-            if (processedUC10.charAt(left) != processedUC10.charAt(right)) {
-                isPalUC10 = false;
-                break;
-            }
-            left++;
-            right--;
+        while (l < r) {
+            if (processedUC10.charAt(l) != processedUC10.charAt(r)) { isPalUC10 = false; break; }
+            l++; r--;
         }
-        System.out.println("UC10: Input: \"" + inputUC10 + "\"");
-        System.out.println("UC10: Normalized: \"" + processedUC10 + "\"");
-        System.out.println("UC10: Result: " + isPalUC10);
+        System.out.println("UC10: Space-Ignored Result: " + isPalUC10);
+
+        // --- UC11: Object-Oriented Palindrome Service ---
+        PalindromeChecker checker = new PalindromeChecker();
+        String inputUC11 = "No lemon, no melon";
+        boolean resultUC11 = checker.checkPalindrome(inputUC11);
+        System.out.println("UC11: OOP Service Result for \"" + inputUC11 + "\": " + resultUC11);
 
         System.out.println("-------------------------------------------");
     }
 
     public static boolean checkRecursive(String str, int s, int e) {
-        if (s >= e) {
-            return true;
-        }
-        if (str.charAt(s) != str.charAt(e)) {
-            return false;
-        }
+        if (s >= e) return true;
+        if (str.charAt(s) != str.charAt(e)) return false;
         return checkRecursive(str, s + 1, e - 1);
     }
 }
