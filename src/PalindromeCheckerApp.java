@@ -160,5 +160,25 @@ public class PalindromeCheckerApp {
 
         System.out.println("UC8: Singly Linked List (In-place Reversal) Result: " + isPalUC8);
         System.out.println("-------------------------------------------");
+
+        // --- UC9: Recursive Palindrome Checker ---
+        String inputUC9 = "racecar";
+        boolean isPalUC9 = checkRecursive(inputUC9, 0, inputUC9.length() - 1);
+        System.out.println("UC9: Recursive Result for " + inputUC9 + ": " + isPalUC9);
+
+        System.out.println("-------------------------------------------");
+    }
+
+    public static boolean checkRecursive(String str, int s, int e) {
+
+        if (s >= e) {
+            return true;
+        }
+
+        if (str.charAt(s) != str.charAt(e)) {
+            return false;
+        }
+
+        return checkRecursive(str, s + 1, e - 1);
     }
 }
